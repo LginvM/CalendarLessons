@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
 import ru.loginov.calendarlessons.DB.DAO.LessonDao
 import ru.loginov.calendarlessons.DB.DAO.TypeLessonDao
 import ru.loginov.calendarlessons.DB.DAO.UserDao
+import ru.loginov.calendarlessons.DB.converters.DateConverter
 import ru.loginov.calendarlessons.DB.tables.Lessons
 import ru.loginov.calendarlessons.DB.tables.TypeLessons
 import ru.loginov.calendarlessons.DB.tables.User
@@ -18,6 +20,7 @@ import ru.loginov.calendarlessons.DB.tables.User
     version = 1,
     exportSchema = false
 )
+@TypeConverters(DateConverter::class)
 abstract class lessonDatabase: RoomDatabase(){
     abstract fun userDao(): UserDao
     abstract fun typeDao(): TypeLessonDao
