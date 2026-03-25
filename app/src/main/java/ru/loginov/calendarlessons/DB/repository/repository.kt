@@ -10,7 +10,7 @@ class Repository(
     private val typeLessonDao: TypeLessonDao,
     private val lessonDao: LessonDao
 ){
-    val user = userDao.getAllUsers()
+    val getAllUser = userDao.getAllUsers()
 
 
     suspend fun insertUser(user: User){

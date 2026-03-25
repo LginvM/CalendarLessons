@@ -1,0 +1,64 @@
+package ru.loginov.calendarlessons.Screens.allAboutUser
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import ru.loginov.calendarlessons.DB.tables.User
+import ru.loginov.calendarlessons.ViewModels.allUsersViewModel
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun screenOfUsers(
+    user: User,
+    onNavigate:(Int) -> Unit,
+    onUserClick:() -> Unit
+){
+    val allUsersViewModel = viewModel(modelClass = allUsersViewModel::class.java)
+    val userState = allUsersViewModel.state
+
+    Scaffold(
+        floatingActionButton={
+            FloatingActionButton(onClick = {onNavigate.invoke(-1)}) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            }
+        },
+
+    ){
+        Card(
+            Modifier.fillMaxWidth()
+                .clickable{
+                    onUserClick.invoke()
+                }
+                .padding(8.dp)
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ){
+                Column(Modifier.padding(8.dp)){
+                    Text(text = user.name + " " + user.lastname, fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.padding(8.dp))
+                    Text(text = user.number)
+                }
+            }
+        }
+    }
+
+}
