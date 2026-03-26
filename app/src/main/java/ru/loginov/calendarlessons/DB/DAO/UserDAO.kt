@@ -2,6 +2,7 @@ package ru.loginov.calendarlessons.DB.DAO
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -26,7 +27,7 @@ interface UserDao {
     fun getAllUsers(): Flow<List<User>>
 
     @Query("SELECT * FROM user WHERE user_id =:userId")
-    fun getItems(userId:Int):Flow<User>
+    fun getUser(userId:Int):Flow<User>
 }
 
 @Dao
@@ -54,3 +55,7 @@ interface LessonDao{
 
 
 }
+
+data class User(
+    @Embedded val user: User,
+)

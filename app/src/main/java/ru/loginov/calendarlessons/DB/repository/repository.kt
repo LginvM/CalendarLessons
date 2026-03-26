@@ -12,6 +12,7 @@ class Repository(
 ){
     val getAllUser = userDao.getAllUsers()
 
+    fun getUser(id:Int) = userDao.getUser(id)
 
     suspend fun insertUser(user: User){
         userDao.insert(user)
