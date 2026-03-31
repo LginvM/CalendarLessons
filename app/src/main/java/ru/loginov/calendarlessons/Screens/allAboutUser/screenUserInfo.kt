@@ -55,7 +55,7 @@ fun UserInfo(
 }
 
 @Composable
-private fun InfoDetailEntry(
+fun InfoDetailEntry(
     modifier: Modifier = Modifier,
     state: DetailState,
     onNameChange: (String) -> Unit,
@@ -150,7 +150,7 @@ private fun InfoDetailEntry(
 
         LaunchedEffect(key1 = state.balance,isFocused){
             if(!isFocused){
-                textStr = state.balance.let { String.format("%d") }
+                textStr = state.balance.let { String.format("%d", it/1,kotlin.math.abs(it % 1)) }
             }
         }
 

@@ -57,5 +57,5 @@ interface LessonDao{
 }
 
 data class User(
-    @Embedded val user: User,
+    @Embedded val user: User
 )

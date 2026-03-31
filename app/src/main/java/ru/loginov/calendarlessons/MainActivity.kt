@@ -7,10 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import ru.loginov.calendarlessons.Navigation.DrumNavigation
+import ru.loginov.calendarlessons.Screens.allAboutUser.UserInfo
 import ru.loginov.calendarlessons.ui.theme.CalendarLessonsTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,11 +22,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CalendarLessonsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Start(Modifier)
                 }
             }
         }
@@ -31,17 +31,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun Start(modifier: Modifier = Modifier) {
+    DrumNavigation()
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CalendarLessonsTheme {
-        Greeting("Android")
-    }
-}

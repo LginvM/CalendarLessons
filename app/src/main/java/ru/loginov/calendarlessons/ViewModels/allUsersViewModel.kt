@@ -25,7 +25,7 @@ class allUsersViewModel(
         viewModelScope.launch{
             repository.getAllUser.collectLatest{
                 state = state.copy(
-                    users = it
+                    user = it
                 )
             }
         }
@@ -33,5 +33,5 @@ class allUsersViewModel(
 }
 
 data class HomeState(
-    val users: List<User> = emptyList()
+    val user: List<User> = emptyList()
 )

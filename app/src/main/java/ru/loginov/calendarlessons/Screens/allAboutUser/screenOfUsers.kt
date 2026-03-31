@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -41,6 +42,11 @@ fun screenOfUsers(
         },
 
     ){
+        LazyColumn {
+            item {
+
+            }
+        }
         Card(
             Modifier.fillMaxWidth()
                 .clickable{
