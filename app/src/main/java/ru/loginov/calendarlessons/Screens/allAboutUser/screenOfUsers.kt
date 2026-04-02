@@ -4,12 +4,16 @@ import android.annotation.SuppressLint
 import android.os.UserManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
@@ -20,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.loginov.calendarlessons.DB.tables.User
@@ -28,9 +33,7 @@ import ru.loginov.calendarlessons.ViewModels.allUsersViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun screenOfUsers(
-    user: User,
     onNavigate:(Int) -> Unit,
-    onUserClick:() -> Unit
 ){
     val allUsersViewModel = viewModel(modelClass = allUsersViewModel::class.java)
     val userState = allUsersViewModel.state
@@ -42,31 +45,29 @@ fun screenOfUsers(
             }
         },
 
-    ){
-        LazyColumn {
-            items(items = userState.user) {
+    ){ paddingValues ->
+        if(userState.user.isEmpty()){
+            Box(Modifier
+                .fillMaxSize()
+                .padding(paddingValues))
+        } else
+            LazyColumn(Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-            }
-        }
-        Card(
-            Modifier
-                .fillMaxWidth()
-                .clickable {
-                    onUserClick.invoke()
+                items(items = userState.user, {it.id}) {
+                    user -> UserCard(
+                        user = user
+                    ){
+
+                        onNavigate.invoke(user.id)
+
+                    }
                 }
-                .padding(8.dp)
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start
-            ){
-                Column(Modifier.padding(8.dp)){
-                    Text(text = user.name + " " + user.lastname, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.padding(8.dp))
-                    Text(text = user.number)
-                }
-            }
         }
+
     }
 
 }
@@ -74,14 +75,31 @@ fun screenOfUsers(
 @Composable
 fun UserCard(
     user: User,
-    onItemClick: () -> Unit
+    onUserClick:() -> Unit
 ){
     Card(
         Modifier
             .fillMaxWidth()
-            .clickable { onItemClick.invoke() }
+            .clickable {
+                onUserClick.invoke()
+            }
             .padding(8.dp)
-    ){
-
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ){
+            Column(Modifier.padding(8.dp)){
+                Text(text = user.name + " " + user.lastname, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.padding(8.dp))
+                Text(text = user.number)
+            }
+        }
     }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+fun screenOfUsers(){
+
 }
