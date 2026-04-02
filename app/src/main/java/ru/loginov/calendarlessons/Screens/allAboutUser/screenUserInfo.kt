@@ -1,5 +1,6 @@
 package ru.loginov.calendarlessons.Screens.allAboutUser
 
+import android.R.attr.enabled
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -48,6 +50,8 @@ fun UserInfo(
             onBirthday = viewModel::onBirthday,
             onBalance = viewModel::onBalance,
             onNotice = viewModel::onNotice,
+            updateUser = {viewModel.updateUser(id)},
+            saveUser = viewModel::addUser
         ){
             navigateUp.invoke()
         }
@@ -64,10 +68,12 @@ fun InfoDetailEntry(
     onPassword: (String) -> Unit,
     onBirthday: (String) -> Unit,
     onBalance: (Int) -> Unit,
+    saveUser:() -> Unit,
+    updateUser:() -> Unit,
     onNotice: (String) -> Unit,
     navigateUp: () -> Unit,
 
-){
+    ){
     var textStr by rememberSaveable { mutableStateOf("") }
     
     var isFocused by remember{
@@ -137,7 +143,7 @@ fun InfoDetailEntry(
             value = state.birthday,
             onValueChange = { onBirthday(it) },
             label = {
-                Text(text = "Номер")
+                Text(text = "День рождения")
             },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -148,9 +154,11 @@ fun InfoDetailEntry(
         Spacer(modifier= Modifier.Companion.size(12.dp))
 
 
+
+
         LaunchedEffect(key1 = state.balance,isFocused){
             if(!isFocused){
-                textStr = state.balance.let { String.format("%d", it/1,kotlin.math.abs(it % 1)) }
+                textStr = state.balance.let { String.format("%d") }
             }
         }
 
@@ -184,6 +192,28 @@ fun InfoDetailEntry(
         )
         Spacer(modifier= Modifier.Companion.size(12.dp))
 
+
+        val buttonTitle = if (state.isUpdatingUser) "Update User"
+            else "Add User"
+
+        Button(
+            onClick = {
+            when(state.isUpdatingUser){
+                true -> {
+                    updateUser.invoke()
+                }
+                false -> {
+                    saveUser.invoke()
+                }
+            }
+                navigateUp.invoke()
+            },
+            modifier= Modifier.fillMaxWidth(),
+            enabled = state.user.isNotEmpty(),
+            shape = Shapes.large
+        ){
+            Text(text = buttonTitle)
+        }
     }
 }
 
@@ -199,13 +229,15 @@ fun intConv(input:String):Int{
 fun PrevDetailEntry(){
     InfoDetailEntry(
         state = DetailState(),
-        onNameChange = { },
-        onLastNameChange = { },
-        onNumber = { },
-        onPassword = { },
-        onBirthday = { },
+        onNameChange = {},
+        onLastNameChange = {},
+        onNumber = {},
+        onPassword = {},
+        onBirthday = {},
         navigateUp = {},
-        onBalance = { },
-        onNotice = { },
+        onBalance = {},
+        onNotice = {},
+        saveUser = {},
+        updateUser = {}
     )
 }

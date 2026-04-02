@@ -66,6 +66,38 @@ class DetailViewModel constructor(
     fun onNotice(newValue: String){
         state = state.copy(notice = newValue)
     }
+
+    fun addUser(){
+        viewModelScope.launch {
+            repository.insertUser(
+                User(
+                    name = state.name,
+                    lastname = state.lastname,
+                    number = state.number,
+                    password = state.password,
+                    birthday = state.birthday,
+                    balance = state.balance,
+                    notice = state.notice
+                )
+            )
+        }
+    }
+
+    fun updateUser(id:Int){
+        viewModelScope.launch {
+            repository.insertUser(
+                User(
+                    name = state.name,
+                    lastname = state.lastname,
+                    number = state.number,
+                    password = state.password,
+                    birthday = state.birthday,
+                    balance = state.balance,
+                    notice = state.notice
+                )
+            )
+        }
+    }
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -83,5 +115,6 @@ data class DetailState(
     val password:String = "",
     val birthday:String = "",
     val balance:Int = 0,
-    val notice:String = ""
+    val notice:String = "",
+    val isUpdatingUser: Boolean = false,
 )
