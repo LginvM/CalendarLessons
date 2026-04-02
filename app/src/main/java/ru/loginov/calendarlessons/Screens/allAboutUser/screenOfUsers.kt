@@ -1,6 +1,7 @@
 package ru.loginov.calendarlessons.Screens.allAboutUser
 
 import android.annotation.SuppressLint
+import android.os.UserManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,13 +44,14 @@ fun screenOfUsers(
 
     ){
         LazyColumn {
-            item {
+            items(items = userState.user) {
 
             }
         }
         Card(
-            Modifier.fillMaxWidth()
-                .clickable{
+            Modifier
+                .fillMaxWidth()
+                .clickable {
                     onUserClick.invoke()
                 }
                 .padding(8.dp)
@@ -67,4 +69,19 @@ fun screenOfUsers(
         }
     }
 
+}
+
+@Composable
+fun UserCard(
+    user: User,
+    onItemClick: () -> Unit
+){
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .clickable { onItemClick.invoke() }
+            .padding(8.dp)
+    ){
+
+    }
 }
