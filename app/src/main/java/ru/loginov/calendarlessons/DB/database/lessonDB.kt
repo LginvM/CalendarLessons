@@ -33,7 +33,7 @@ abstract class lessonDatabase: RoomDatabase(){
         fun getDatabase(context: Context):lessonDatabase{
             return INSTANCE?: synchronized(this) {
                     val instance = Room.databaseBuilder(
-                        context,
+                        context.applicationContext,
                         lessonDatabase::class.java,
                         "shopping_db"
                     ).fallbackToDestructiveMigration().build()
