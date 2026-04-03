@@ -20,7 +20,7 @@ class DetailViewModel constructor(
         private set
 
     init{
-
+        getUser()
         if (userId!=-1){
             viewModelScope.launch {
                 repository.getUser(userId)
@@ -96,6 +96,14 @@ class DetailViewModel constructor(
                     notice = state.notice
                 )
             )
+        }
+    }
+
+    fun getUser(){
+        viewModelScope.launch {
+            repository.getAllUser.collectLatest {
+                state = state.copy(it)
+            }
         }
     }
 }

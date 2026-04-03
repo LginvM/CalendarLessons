@@ -224,20 +224,20 @@ fun intConv(input:String):Int{
     return normalized.toInt()
 }
 
-@Composable
-@Preview(showSystemUi = true)
-fun PrevDetailEntry(){
-    InfoDetailEntry(
-        state = DetailState(),
-        onNameChange = {},
-        onLastNameChange = {},
-        onNumber = {},
-        onPassword = {},
-        onBirthday = {},
-        navigateUp = {},
-        onBalance = {},
-        onNotice = {},
-        saveUser = {},
-        updateUser = {}
-    )
-}
+//@Composable
+//@Preview(showSystemUi = true)
+//fun PrevDetailEntry(){
+//    InfoDetailEntry(
+//        state = DetailState(),
+//        onNameChange = {},
+//        onLastNameChange = {},
+//        onNumber = {},
+//        onPassword = {},
+//        onBirthday = {},
+//        navigateUp = {},
+//        onBalance = {},
+//        onNotice = {},
+//        saveUser = {},
+//        updateUser = {}
+//    )
+//}

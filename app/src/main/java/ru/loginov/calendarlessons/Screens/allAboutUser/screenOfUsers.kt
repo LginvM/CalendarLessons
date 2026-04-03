@@ -98,8 +98,8 @@ fun UserCard(
     }
 }
 
-@Composable
-@Preview(showSystemUi = true)
-fun screenOfUsers(){
-
-}
+//@Composable
+//@Preview(showSystemUi = true)
+//fun screenOfUsers(){
+//
+//}

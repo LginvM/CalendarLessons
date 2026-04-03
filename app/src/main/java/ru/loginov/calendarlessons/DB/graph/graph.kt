@@ -5,6 +5,7 @@ import ru.loginov.calendarlessons.DB.database.lessonDatabase
 import ru.loginov.calendarlessons.DB.repository.Repository
 
 object graph {
+
     lateinit var db: lessonDatabase
         private set
 
