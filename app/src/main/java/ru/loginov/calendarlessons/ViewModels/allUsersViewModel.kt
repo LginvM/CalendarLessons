@@ -14,7 +14,7 @@ import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.User
 
 class allUsersViewModel(
-    private val repository: Repository
+    private val repository: Repository = graph.repository
 ): ViewModel(){
 
     var state by mutableStateOf(HomeState())
