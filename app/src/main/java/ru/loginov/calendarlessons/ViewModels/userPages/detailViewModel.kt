@@ -1,4 +1,4 @@
-package ru.loginov.calendarlessons.ViewModels
+package ru.loginov.calendarlessons.ViewModels.userPages
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

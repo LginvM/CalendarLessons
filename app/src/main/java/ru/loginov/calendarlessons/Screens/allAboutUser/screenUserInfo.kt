@@ -1,6 +1,5 @@
 package ru.loginov.calendarlessons.Screens.allAboutUser
 
-import android.R.attr.enabled
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,12 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import ru.loginov.calendarlessons.ViewModels.DetailState
-import ru.loginov.calendarlessons.ViewModels.DetailViewModel
-import ru.loginov.calendarlessons.ViewModels.DetailViewModelFactor
+import ru.loginov.calendarlessons.ViewModels.userPages.DetailState
+import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModel
+import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModelFactor
 import ru.loginov.calendarlessons.ui.theme.Shapes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

@@ -36,7 +36,7 @@ abstract class lessonDatabase: RoomDatabase(){
                         context.applicationContext,
                         lessonDatabase::class.java,
                         "shopping_db"
-                    ).fallbackToDestructiveMigration().build()
+                    ).build() //fallbackToDestructiveMigration().
                     INSTANCE = instance
                     return instance
                 }

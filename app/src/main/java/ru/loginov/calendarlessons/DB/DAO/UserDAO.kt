@@ -23,6 +23,9 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
+    @Query("SELECT number,password FROM user WHERE number = :login AND password = :password LIMIT 1")
+    fun getNumberAndPassword(login: String, password:String): Flow<PhoneAndPassword?>
+
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<User>>
 
@@ -57,5 +60,10 @@ interface LessonDao{
 }
 
 data class User(
-    @Embedded val user: User
+    @Embedded val user: User,
+
+)
+data class PhoneAndPassword(
+    val phone: String,
+    val password: String
 )
