@@ -14,21 +14,21 @@ import ru.loginov.calendarlessons.Screens.allAboutUser.screenOfUsers
 import ru.loginov.calendarlessons.ViewModels.DetailState
 
 enum class Routes{
-    AllUser, DetailUser
+    First, Second
 }
 
 @Composable
 fun DrumNavigation(
     navHostController: NavHostController = rememberNavController()
 ){
-    NavHost(navHostController, startDestination = Routes.AllUser.name){
-        composable(route = Routes.AllUser.name){
+    NavHost(navHostController, startDestination = Routes.First.name){
+        composable(route = Routes.First.name){
             screenOfUsers({
-                id -> navHostController.navigate(route = "${Routes.DetailUser.name}?id=$id")
+                id -> navHostController.navigate(route = "${Routes.Second.name}?id=$id")
             })
         }
         composable(
-            route = "${Routes.DetailUser.name}?id={id}",
+            route = "${Routes.Second.name}?id={id}",
             arguments = listOf(navArgument("id"){type = NavType.IntType})
         ){
             val id = it.arguments?.getInt("id") ?: -1
