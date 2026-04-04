@@ -156,16 +156,27 @@ fun InfoDetailEntry(
 
 
 
+
+
+
+
+
+
         LaunchedEffect(key1 = state.balance,isFocused){
-            if(!isFocused){
-                textStr = state.balance.let { String.format("%d") }
-            }
+            val s = state.balance.toString()
+            if (s != textStr) textStr = s
         }
 
 
         TextField(
             value = textStr,
-            onValueChange = { newText -> textStr.filter { it.isDigit() } },
+            onValueChange = { newText ->
+                val filtered = newText.filter { it.isDigit()}
+                textStr = filtered
+                val parsed = filtered.toIntOrNull()
+                if (parsed != null && parsed != state.balance) {
+                    onBalance(parsed) // обновляем числовой стейт/VM
+                }},
             label = {
                 Text(text = "Баланс")
             },
@@ -177,6 +188,22 @@ fun InfoDetailEntry(
             shape = Shapes.large
         )
         Spacer(modifier= Modifier.Companion.size(12.dp))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         TextField(
             value = state.notice,
