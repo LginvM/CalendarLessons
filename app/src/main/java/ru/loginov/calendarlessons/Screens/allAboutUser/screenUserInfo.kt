@@ -236,7 +236,7 @@ fun InfoDetailEntry(
                 navigateUp.invoke()
             },
             modifier= Modifier.fillMaxWidth(),
-            enabled = state.user.isNotEmpty(),
+            //enabled = state.user.isNotEmpty(),
             shape = Shapes.large
         ){
             Text(text = buttonTitle)
