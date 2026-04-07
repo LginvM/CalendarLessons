@@ -23,8 +23,8 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
-    @Query("SELECT number,password FROM user WHERE number = :login AND password = :password LIMIT 1")
-    fun getNumberAndPassword(login: String, password:String): Flow<PhoneAndPassword?>
+    @Query("SELECT number,password FROM user WHERE number = :phone AND password = :password LIMIT 1")
+    fun getNumberAndPassword(phone: String, password:String): Flow<PhoneAndPassword?>
 
     @Query("SELECT * FROM user")
     fun getAllUsers(): Flow<List<User>>

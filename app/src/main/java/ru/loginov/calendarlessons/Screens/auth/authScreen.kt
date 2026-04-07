@@ -16,6 +16,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 import ru.loginov.calendarlessons.DB.graph.graph
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
@@ -35,8 +37,9 @@ import ru.loginov.calendarlessons.ViewModels.userPages.HomeState
 
 @Composable
 fun auth(
-
+    viewModel: authViewModel
 ){
+    val matched by viewModel.matchedData.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -49,7 +52,7 @@ fun auth(
 
             TextField(
                 value = "",
-                onValueChange = {},
+                onValueChange = { viewModel.number = it},
                 label = {
                     Text("Номер")
                 },
@@ -57,13 +60,13 @@ fun auth(
             )
             Spacer(Modifier.size(8.dp))
             TextField(value = "",
-                onValueChange = {},
+                onValueChange = {viewModel.password = it},
                 label = {
                     Text("Пароль")
                 },
                 trailingIcon = {
                     // Кнопка-иконка справа
-                    IconButton(onClick = { if ()  }) {
+                    IconButton(onClick = { viewModel.check() }) {
                         Icon(
                             imageVector = Icons.Default.Clear,
                             contentDescription = "Очистить"
@@ -71,6 +74,7 @@ fun auth(
                     }
                 }
             )
+
         }
     }
 }
@@ -78,5 +82,4 @@ fun auth(
 @Composable
 @Preview(showSystemUi = true)
 fun prew(){
-    auth()
 }
