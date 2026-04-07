@@ -49,8 +49,8 @@ class authViewModel(
     fun check(){
         val n = number.trim()
         val p = password.trim()
-        viewModelScope.launch {
-            val found = repository.getPhoneAndPassword(n,p) }
+        if (n.isEmpty() || p.isEmpty()) return
+        queryFlow.value = Pair(n, p) // это запустит matchedData flow
     }
 
 }
