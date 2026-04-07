@@ -64,6 +64,6 @@ data class User(
 
 )
 data class PhoneAndPassword(
-    val phone: String,
+    val number: String,
     val password: String
 )
