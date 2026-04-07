@@ -14,9 +14,9 @@ class Repository(
 ){
     val getAllUser = userDao.getAllUsers()
 
-    fun getPhoneAndPassword(phone: String, password: String): Flow<PhoneAndPassword?> {
-        return userDao.getNumberAndPassword(phone, password)
-    }
+    suspend  fun getPhoneAndPassword(phone: String): PhoneAndPassword?
+        = userDao.getNumberAndPassword(phone)
+
 
     fun getUser(id:Int) = userDao.getUser(id)
 

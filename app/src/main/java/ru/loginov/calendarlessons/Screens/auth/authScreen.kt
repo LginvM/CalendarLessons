@@ -1,45 +1,36 @@
 package ru.loginov.calendarlessons.Screens.auth
 
-import android.R.attr.text
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlexDirection.Companion.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.flow.collectLatest
-import ru.loginov.calendarlessons.DB.graph.graph
-import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
-import ru.loginov.calendarlessons.ViewModels.authPage.authViewModelFactor
-import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModel
-import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModelFactor
-import ru.loginov.calendarlessons.ViewModels.userPages.HomeState
+import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 
 
 @Composable
 fun auth(
-    viewModel: authViewModel
+
 ){
-    val matched by viewModel.matchedData.collectAsState()
+    val authViewModel = viewModel(modelClass = authViewModel::class.java)
+    val uiState = authViewModel.uiState
+
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -51,22 +42,22 @@ fun auth(
 
 
             TextField(
-                value = "",
-                onValueChange = { viewModel.number = it},
+                value = uiState.value.number,
+                onValueChange = { authViewModel.onNumberChanged(it) },
                 label = {
                     Text("Номер")
                 },
                 modifier = Modifier
             )
             Spacer(Modifier.size(8.dp))
-            TextField(value = "",
-                onValueChange = {viewModel.password = it},
+            TextField(value = uiState.value.password,
+                onValueChange = { authViewModel.onPasswordChanged(it) },
                 label = {
                     Text("Пароль")
                 },
                 trailingIcon = {
                     // Кнопка-иконка справа
-                    IconButton(onClick = { viewModel.check() }) {
+                    IconButton(onClick = { authViewModel.login() }) {
                         Icon(
                             imageVector = Icons.Default.Clear,
                             contentDescription = "Очистить"
@@ -74,9 +65,21 @@ fun auth(
                     }
                 }
             )
+            uiState.value.error?.let { Text(text = it, color = Color.Red) }
+            if (uiState.value.isAuthenticated) {
+                Text(text = "Успешно", color = Color.Green)
+            }
+
+
 
         }
     }
+}
+
+
+@Composable
+fun uiAuth(){
+
 }
 
 @Composable
