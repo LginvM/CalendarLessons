@@ -68,6 +68,10 @@ fun auth(
             uiState.value.error?.let { Text(text = it, color = Color.Red) }
             if (uiState.value.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
+                LaunchedEffect(Unit) {
+        // Предположим, что вы передаёте userId в FirstScreen
+        navHostController.navigate("${Routes.First.name}?id=${uiState.value.userId}")
+                }
             }
 
 
