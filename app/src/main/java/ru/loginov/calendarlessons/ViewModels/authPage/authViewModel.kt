@@ -75,6 +75,7 @@ data class AuthState(
     val number: String = "",
     val password: String = "",
     val name:String = "",
+    val userId: Int? = null,
     val isAuthenticated: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null
