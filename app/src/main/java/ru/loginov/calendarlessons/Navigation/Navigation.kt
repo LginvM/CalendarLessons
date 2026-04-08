@@ -22,7 +22,7 @@ fun DrumNavigation(
     NavHost(navHostController, startDestination = Routes.Auth.name){
 
         composable(route = Routes.Auth.name){
-            auth()
+            auth(navController = navHostController)
         }
 
         composable(route = Routes.First.name){
