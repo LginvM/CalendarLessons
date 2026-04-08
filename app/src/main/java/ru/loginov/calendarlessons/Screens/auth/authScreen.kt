@@ -26,7 +26,7 @@ import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 
 @Composable
 fun auth(
-
+    navController: NavController
 ){
     val authViewModel = viewModel(modelClass = authViewModel::class.java)
     val uiState = authViewModel.uiState
