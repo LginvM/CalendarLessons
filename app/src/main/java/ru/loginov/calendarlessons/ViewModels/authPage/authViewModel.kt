@@ -54,13 +54,17 @@ class authViewModel(
             }
 
             val ok = passwordInput == user.password
-
-            uiState.value = uiState.value.copy(
+            If(ok){
+                uiState.value = uiState.value.copy(
                 isLoading = false,
                 isAuthenticated = ok,
+                userId = user.id
+                )
+            } else {
+            uiState.value = uiState.value.copy(
+                isLoading = false,
                 error = if (ok) null else "Неверный пароль"
-            )
-
+                )
         }
     }
 }
