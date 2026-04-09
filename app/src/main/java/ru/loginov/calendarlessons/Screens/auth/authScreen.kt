@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import ru.loginov.calendarlessons.Navigation.Routes
 import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
 import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 
@@ -69,8 +72,7 @@ fun auth(
             if (uiState.value.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
                 LaunchedEffect(Unit) {
-        // Предположим, что вы передаёте userId в FirstScreen
-        navHostController.navigate("${Routes.First.name}?id=${uiState.value.userId}")
+                    navController.navigate("${Routes.First.name}?id=${uiState.value.userId}")
                 }
             }
 
