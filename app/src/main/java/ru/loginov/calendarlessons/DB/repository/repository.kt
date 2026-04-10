@@ -55,7 +55,7 @@ class Repository(
     }
 
     //Создание записи о занятии
-    suspend fun bookUser(userId:Int, lessonSlotId:Int, date: Date){
+    suspend fun bookUser(userId:Int, lessonSlotId:Int, date: String){
         val lesson = Lesson(
             userId = userId,
             lessonSlotId = lessonSlotId,

@@ -92,6 +92,6 @@ data class PhoneAndPassword(
 data class Lesson(
     val userId:Int,
     val lessonSlotId:Int,
-    val date: Date
+    val date: String
 )
 
