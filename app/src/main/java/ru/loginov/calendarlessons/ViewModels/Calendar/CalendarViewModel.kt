@@ -20,7 +20,7 @@ class CalendarViewModel (
 
     fun setSelectedDate(date: String){
         selectedDate.value = date
-        //loadAvailableSlots(date)
+        loadAvailableSlots(date)
     }
 
     private fun loadAvailableSlots(date:String){
