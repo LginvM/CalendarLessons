@@ -20,15 +20,26 @@ data class User(
     val notice:String
 )
 
-@Entity(tableName = "lesson")
-data class Lessons(
-    @ColumnInfo(name = "lesson_id")
+@Entity(tableName = "lesson_slot")
+data class Lessons_slot(
+    @ColumnInfo(name = "slot_id")
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val date: Date,
-    val time: Time,
-    val userId:Int,
-    val typeId:Int
+    val start_time: Time,
+    val end_time: Time,
+    val day_of_week: Int
+)
+
+@Entity(tableName = "lesson")
+data class Lessons(
+    @ColumnInfo("lesson_id")
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+    val user_id: Int,
+    val lesson_slot_id: Int,
+    val lesson_date: Date,
+    val status: String,
+    val created_at: Date
 )
 
 @Entity(tableName = "type_lessons")
