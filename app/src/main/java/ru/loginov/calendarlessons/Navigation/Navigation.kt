@@ -12,7 +12,7 @@ import ru.loginov.calendarlessons.Screens.allAboutUser.screenOfUsers
 import ru.loginov.calendarlessons.Screens.auth.auth
 
 enum class Routes{
-    Auth, First, Second
+    Auth, Calendar, ListUsers, UpdateUser
 }
 
 @Composable
@@ -25,13 +25,13 @@ fun DrumNavigation(
             auth(navController = navHostController)
         }
 
-        composable(route = Routes.First.name){
+        composable(route = Routes.ListUsers.name){
             screenOfUsers({
-                id -> navHostController.navigate(route = "${Routes.Second.name}?id=$id")
+                id -> navHostController.navigate(route = "${Routes.UpdateUser.name}?id=$id")
             })
         }
         composable(
-            route = "${Routes.Second.name}?id={id}",
+            route = "${Routes.UpdateUser.name}?id={id}",
             arguments = listOf(navArgument("id"){type = NavType.IntType})
         ){
             val id = it.arguments?.getInt("id") ?: -1

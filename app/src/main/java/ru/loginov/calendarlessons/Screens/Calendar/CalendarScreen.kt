@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import kotlin.collections.get
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
+import java.util.Date
 
 @Composable
 fun CalendarScreen(
@@ -97,6 +99,14 @@ fun DatePicker(onDateSelected:(String) -> Unit){
         DatePicker (
             state = datePickerState
         )
+        Button(onClick = {
+            val selected = datePickerState.selectedDateMillis
+            if(selected!=null){
+                onDateSelected(formatter.format(Date(selected)))
+            }
+        }) {
+            Text("Выбрать дату")
+        }
     }
 
 }

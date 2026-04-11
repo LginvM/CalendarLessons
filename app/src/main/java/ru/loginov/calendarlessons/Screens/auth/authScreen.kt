@@ -9,12 +9,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import ru.loginov.calendarlessons.Navigation.Routes
 import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
-import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 
 
 @Composable
@@ -72,7 +69,7 @@ fun auth(
             if (uiState.value.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
                 LaunchedEffect(Unit) {
-                    navController.navigate("${Routes.First.name}?id=${uiState.value.userId}")
+                    navController.navigate("${Routes.ListUsers.name}?id=${uiState.value.userId}")
                 }
             }
 
