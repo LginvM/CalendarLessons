@@ -37,7 +37,7 @@ class CalendarViewModel (
         }
     }
 
-    fun bookSlot(lessonsSlotId : Int){
+    fun bookLesson(lessonsSlotId : Int){
         val date = selectedDate.value ?:return
         val currentUserId = userId.value ?:return
 
