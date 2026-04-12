@@ -69,7 +69,8 @@ fun auth(
             if (uiState.value.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
                 LaunchedEffect(Unit) {
-                    navController.navigate("${Routes.ListUsers.name}?id=${uiState.value.userId}")
+                    navController.previousBackStackEntry?.savedStateHandle?.set("userId",uiState.value.userId)
+                    navController.navigate("${Routes.Calendar.name}?id=${uiState.value.userId}")
                 }
             }
 
