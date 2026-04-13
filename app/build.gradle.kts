@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
+    id("com.google.dagger.hilt.android") version "2.57.1" apply false
     alias(libs.plugins.google.devtools.ksp)
+
 }
 
 android {
@@ -120,4 +121,9 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.5.0-alpha15")
+
+
+    implementation("com.google.dagger:hilt-android:2.57.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+
 }
