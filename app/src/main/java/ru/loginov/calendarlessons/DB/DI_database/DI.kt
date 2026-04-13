@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.loginov.calendarlessons.DB.DAO.Lessons_slotDao
 import ru.loginov.calendarlessons.DB.repository.Repository
 import javax.inject.Singleton
 
@@ -26,7 +27,8 @@ object AppModule{
         return Repository(
             userDao = database.userDao(),
             typeLessonDao = database.typeDao(),
-            lessonDao = database.lessonDao()
+            lessonDao = database.lessonDao(),
+            Lessons_slotDao = database.Lessons_slotDao()
         )
     }
 }

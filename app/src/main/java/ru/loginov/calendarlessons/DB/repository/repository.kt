@@ -3,6 +3,7 @@ package ru.loginov.calendarlessons.DB.repository
 import kotlinx.coroutines.flow.Flow
 import ru.loginov.calendarlessons.DB.DAO.Lesson
 import ru.loginov.calendarlessons.DB.DAO.LessonDao
+import ru.loginov.calendarlessons.DB.DAO.Lessons_slotDao
 import ru.loginov.calendarlessons.DB.DAO.PhoneAndPassword
 import ru.loginov.calendarlessons.DB.DAO.TypeLessonDao
 import ru.loginov.calendarlessons.DB.DAO.UserDao
@@ -16,11 +17,12 @@ import java.util.Date
 class Repository(
     private val userDao: UserDao,
     private val typeLessonDao: TypeLessonDao,
-    private val lessonDao: LessonDao
+    private val lessonDao: LessonDao,
+    private val Lessons_slotDao: Lessons_slotDao
 ){
     val getAllUser = userDao.getAllUsers()
 
-    suspend  fun getPhoneAndPassword(phone: String): PhoneAndPassword?
+    suspend fun getPhoneAndPassword(phone: String): PhoneAndPassword?
         = userDao.getNumberAndPassword(phone)
 
 
@@ -62,7 +64,7 @@ class Repository(
             date = date
             )
 
-        lessonDao.bookLesson(lesson)
+        //lessonDao.bookLesson(Lesson)
     }
 
 

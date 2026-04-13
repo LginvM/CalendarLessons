@@ -18,7 +18,7 @@ class DetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val repository: Repository
 ): ViewModel(){
-    private val userId:Int = savedStateHandle.get<Int>("userId") ?: -1
+    private val userId:Int = savedStateHandle.get<Int>("id") ?: -1
     private val _state = MutableStateFlow(DetailState())
     val state : StateFlow<DetailState> = _state
 

@@ -36,5 +36,15 @@ fun DrumNavigation(
             )
         }
 
+        composable(route = "${Routes.UpdateUser.name}/{id}",
+            arguments = listOf(
+                navArgument("id"){
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )) { UserInfo(navHostController::navigateUp)
+
+        }
+
     }
 }

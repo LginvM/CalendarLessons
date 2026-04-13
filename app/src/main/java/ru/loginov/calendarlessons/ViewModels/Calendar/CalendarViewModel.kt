@@ -4,13 +4,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.loginov.calendarlessons.DB.graph.graph
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import java.util.Date
 
 class CalendarViewModel (
-    private val repository: Repository = graph.repository
+    private val repository: Repository
 ): ViewModel(){
     val selectedDate = mutableStateOf<String?>(null)
     val availableSlot = mutableStateOf<List<Lessons_slot>>(emptyList())

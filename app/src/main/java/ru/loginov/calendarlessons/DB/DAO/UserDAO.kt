@@ -84,15 +84,18 @@ interface LessonDao{
 
     //записаться
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun bookLesson(lesson: Lesson)
+    suspend fun bookLesson(lesson: Lessons)
 
+
+}
+@Dao
+interface Lessons_slotDao{
 
 }
 
 
 data class User(
-    @Embedded val user: User,
-
+    val user: User,
 )
 data class PhoneAndPassword(
     val number: String,
