@@ -12,11 +12,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule{
+object AppModule{
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): lessonDatabase{
-        return Room.databaseBuilder(context, lessonDatabase::class.java,"shopping_db")
+        return Room.databaseBuilder(context, lessonDatabase::class.java,"lesson_db")
             .fallbackToDestructiveMigration().build()
     }
 

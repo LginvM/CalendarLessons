@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import ru.loginov.calendarlessons.DB.graph.GraphProvide
+import ru.loginov.calendarlessons.DB.graph.AppApplication
 import ru.loginov.calendarlessons.Screens.Calendar.CalendarScreen
 import ru.loginov.calendarlessons.Screens.allAboutUser.UserInfo
 import ru.loginov.calendarlessons.Screens.allAboutUser.screenOfUsers
@@ -44,7 +44,7 @@ fun DrumNavigation(
                     @Composable
                     @Suppress("UNCHECKED_CAST")
                     override fun <T: ViewModel?> create(modelClass:Class<T>): T {
-                        val repository = (LocalContext.current.applicationContext as GraphProvide)
+                        val repository = (LocalContext.current.applicationContext as AppApplication)
                         return CalendarViewModel(repository) as T
                     }
                 }
