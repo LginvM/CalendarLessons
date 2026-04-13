@@ -21,10 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import ru.loginov.calendarlessons.DB.tables.User
 import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 
@@ -32,9 +34,10 @@ import ru.loginov.calendarlessons.ViewModels.userPages.allUsersViewModel
 @Composable
 fun screenOfUsers(
     onNavigate:(Int) -> Unit,
+
 ){
-    val allUsersViewModel = viewModel(modelClass = allUsersViewModel::class.java)
-    val userState = allUsersViewModel.state
+    val viewModel:allUsersViewModel = hiltViewModel()
+    val userState by viewModel.state.collectAsState()
 
     Scaffold(
         floatingActionButton={

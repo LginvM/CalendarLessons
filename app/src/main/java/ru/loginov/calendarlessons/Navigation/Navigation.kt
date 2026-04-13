@@ -26,47 +26,15 @@ enum class Routes{
 fun DrumNavigation(
     navHostController: NavHostController = rememberNavController()
 ){
-    NavHost(navHostController, startDestination = Routes.Auth.name){
+    NavHost(navHostController, startDestination = Routes.ListUsers.name){
 
-        composable(route = Routes.Auth.name){
-            auth(navHostController)
-
-//            userId ->
-//            navHostController.navigate(Routes.Calendar.name)
-//            navHostController.previousBackStackEntry.savedStateHandle?.set("userId",userId)
-        }
-
-        composable(Routes.Calendar.name){
-            val userId = navHostController.currentBackStackEntry?.savedStateHandle
-                ?.get<Int>("userId") ?: return@composable
-            val viewModel: CalendarViewModel = viewModel(
-                factory = object : ViewModelProvider.Factory{
-                    @Composable
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T: ViewModel?> create(modelClass:Class<T>): T {
-                        val repository = (LocalContext.current.applicationContext as AppApplication)
-                        return CalendarViewModel(repository) as T
-                    }
+        composable(route = Routes.ListUsers.name) {
+            screenOfUsers(
+                onNavigate = { id ->
+                    navHostController.navigate("${Routes.UpdateUser.name}/$id")
                 }
             )
         }
-        CalendarScreen(navHostController, CalendarViewModel )
 
-        composable(route = Routes.ListUsers.name){
-            screenOfUsers({
-                id -> navHostController.navigate(route = "${Routes.UpdateUser.name}?id=$id")
-            })
-        }
-        composable(
-            route = "${Routes.UpdateUser.name}?id={id}",
-            arguments = listOf(navArgument("id"){type = NavType.IntType})
-        ){
-            val id = it.arguments?.getInt("id") ?: -1
-            UserInfo(
-                id = id
-            ){
-                navHostController.navigateUp()
-            }
-        }
     }
 }

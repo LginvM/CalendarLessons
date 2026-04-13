@@ -1,23 +1,26 @@
 package ru.loginov.calendarlessons.ViewModels.userPages
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.loginov.calendarlessons.DB.graph.graph
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.User
+import javax.inject.Inject
 
-class DetailViewModel constructor(
-    private val userId:Int,
-    private val repository: Repository = graph.repository
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+    private val repository: Repository
 ): ViewModel(){
-    var state by mutableStateOf(DetailState())
-        private set
+    private val userId:Int = savedStateHandle.get<Int>("userId") ?: -1
+    private val _state = MutableStateFlow(DetailState())
+    val state : StateFlow<DetailState> = _state
 
     init{
         getUser()
@@ -25,7 +28,7 @@ class DetailViewModel constructor(
             viewModelScope.launch {
                 repository.getUser(userId)
                     .collectLatest {
-                        state = state.copy(
+                        _state.value = state.value.copy(
                             name = it.name,
                             lastname = it.lastname,
                             number = it.number,
@@ -40,60 +43,62 @@ class DetailViewModel constructor(
     }
 
     fun onNameChange(newValue: String){
-        state = state.copy(name = newValue)
+        _state.update{it.copy(name = newValue)}
     }
 
     fun onLastNameChange(newValue: String){
-        state = state.copy(lastname = newValue)
+        _state.update{it.copy(lastname = newValue)}
     }
 
     fun onNumber(newValue: String){
-        state = state.copy(number = newValue)
+        _state.update{it.copy(number = newValue)}
     }
 
     fun onPassword(newValue: String){
-        state = state.copy(password = newValue)
+        _state.update{it.copy(password = newValue)}
     }
 
     fun onBirthday(newValue: String){
-        state = state.copy(birthday = newValue)
+        _state.update{it.copy(birthday = newValue)}
     }
 
     fun onBalance(newValue: Int){
-        state = state.copy(balance = newValue)
+        _state.update{it.copy(balance = newValue)}
     }
 
     fun onNotice(newValue: String){
-        state = state.copy(notice = newValue)
+        _state.update{it.copy(notice = newValue)}
     }
 
     fun addUser(){
         viewModelScope.launch {
+            val currentUser = _state.value
             repository.insertUser(
                 User(
-                    name = state.name,
-                    lastname = state.lastname,
-                    number = state.number,
-                    password = state.password,
-                    birthday = state.birthday,
-                    balance = state.balance,
-                    notice = state.notice
+                    name = currentUser.name,
+                    lastname = currentUser.lastname,
+                    number = currentUser.number,
+                    password = currentUser.password,
+                    birthday = currentUser.birthday,
+                    balance = currentUser.balance,
+                    notice = currentUser.notice
                 )
             )
         }
     }
 
-    fun updateUser(id:Int){
+    fun updateUser(){
         viewModelScope.launch {
-            repository.insertUser(
+            val currentUser = _state.value
+            repository.updateUser(
                 User(
-                    name = state.name,
-                    lastname = state.lastname,
-                    number = state.number,
-                    password = state.password,
-                    birthday = state.birthday,
-                    balance = state.balance,
-                    notice = state.notice
+                    name = currentUser.name,
+                    lastname = currentUser.lastname,
+                    number = currentUser.number,
+                    password = currentUser.password,
+                    birthday = currentUser.birthday,
+                    balance = currentUser.balance,
+                    notice = currentUser.notice
                 )
             )
         }
@@ -102,18 +107,14 @@ class DetailViewModel constructor(
     fun getUser(){
         viewModelScope.launch {
             repository.getAllUser.collectLatest {
-                state = state.copy(it)
+                _state.update { it.copy(
+                    user = state.value.user
+                ) }
             }
         }
     }
 }
 
-@Suppress("UNCHECKED_CAST")
-class DetailViewModelFactor(private val id:Int): ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(userId = id) as T
-    }
-}
 
 data class DetailState(
     val user:List<User> = emptyList(),
