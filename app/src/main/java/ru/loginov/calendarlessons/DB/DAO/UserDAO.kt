@@ -60,9 +60,19 @@ interface LessonDao{
     @Query("SELECT * FROM lesson_slot ")
     suspend fun getAllSlots():List<Lessons_slot>
 
+
+
+    //Получить занятые слоты на дату
+    @Query("SELECT lesson_slot_id FROM lesson WHERE lesson_date=:date ")
+    suspend fun getBookedSlotWithId(date:String):List<Int>
+
+
+
     //занятые слоты по id
     @Query("SELECT lesson_id FROM lesson WHERE lesson_date =:date ")
     suspend fun getBookedSlotsId(date:String):List<Int>
+
+
 
     //Все слоты по дате и id пользователя
     @Query("SELECT ls.* FROM lesson_slot ls " +

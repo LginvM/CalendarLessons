@@ -20,7 +20,7 @@ class CalendarViewModel (
 
     fun setSelectedDate(date: String){
         selectedDate.value = date
-        //loadAvailableSlots(date)
+        loadAvailableSlots(date)
     }
 
     private fun loadAvailableSlots(date:String){
@@ -37,7 +37,7 @@ class CalendarViewModel (
         }
     }
 
-    fun bookSlot(lessonsSlotId : Int){
+    fun bookLesson(lessonsSlotId : Int){
         val date = selectedDate.value ?:return
         val currentUserId = userId.value ?:return
 
