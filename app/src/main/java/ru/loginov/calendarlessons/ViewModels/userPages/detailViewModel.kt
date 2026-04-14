@@ -73,6 +73,7 @@ class DetailViewModel @Inject constructor(
     fun addUser(){
         viewModelScope.launch {
             val currentUser = _state.value
+            println("DEBUG: Попытка сохранения: ${currentUser.name}")
             repository.insertUser(
                 User(
                     name = currentUser.name,
@@ -84,6 +85,7 @@ class DetailViewModel @Inject constructor(
                     notice = currentUser.notice
                 )
             )
+            println("DEBUG: Сохранение: ${currentUser.name}")
         }
     }
 

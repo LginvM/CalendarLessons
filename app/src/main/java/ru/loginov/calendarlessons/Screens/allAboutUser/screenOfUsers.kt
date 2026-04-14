@@ -51,6 +51,8 @@ fun screenOfUsers(
             Box(Modifier
                 .fillMaxSize()
                 .padding(paddingValues))
+            Spacer(Modifier.padding(20.dp))
+            Text("Нет пользователей")
         } else
             LazyColumn(Modifier
                 .fillMaxSize()

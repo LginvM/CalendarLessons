@@ -26,10 +26,10 @@ class allUsersViewModel @Inject constructor(
 
     fun getUsers(){
         viewModelScope.launch{
-            repository.getAllUser.collectLatest{
-                _state.update { it.copy(
-                    user = state.value.user
-                ) }
+            repository.getAllUser.collectLatest{ userFromDB ->
+                _state.update { currentState ->
+                    currentState.copy(user = userFromDB)
+                 }
             }
         }
     }
