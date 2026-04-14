@@ -63,7 +63,7 @@ class authViewModel @Inject constructor(
                         it.copy(
                             isLoading = false,
                             isAuthenticated = ok,
-                            userId = uiState.value.userId
+                            userId = user.id
                         ) }
                 } else {
                     _uiState.update{

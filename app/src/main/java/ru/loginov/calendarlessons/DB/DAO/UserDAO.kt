@@ -25,7 +25,7 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
-    @Query("SELECT * FROM user WHERE number = :phone LIMIT 1")
+    @Query("SELECT user_id, number, password FROM user WHERE number = :phone LIMIT 1")
     suspend fun getNumberAndPassword(phone: String): PhoneAndPassword?
 
     @Query("SELECT * FROM user")
@@ -98,6 +98,7 @@ data class User(
     val user: User,
 )
 data class PhoneAndPassword(
+    val id:Int,
     val number: String,
     val password: String
 )
