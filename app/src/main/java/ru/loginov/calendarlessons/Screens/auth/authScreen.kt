@@ -70,12 +70,16 @@ fun auth(
             uiState.error?.let { Text(text = it, color = Color.Red) }
             if (uiState.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
-                LaunchedEffect(uiState.isAuthenticated) {
-//                    navController.previousBackStackEntry?.savedStateHandle?.set("userId",uiState.userId)
-//                    navController.navigate("${Routes.Calendar.name}?id=${uiState.userId}")
-                    navController.navigate("${Routes.Calendar.name}/${uiState.userId}"){
+
+                LaunchedEffect(uiState.isAuthenticated,uiState.userId) {
+                    uiState.userId?.let{
+                        id -> navController.navigate("${Routes.Calendar.name}/${id}"){
                         popUpTo(Routes.Auth.name) { inclusive = true }
                     }
+                    } ?: run{
+                        println("Ошибка: Авторизация успешна, но userId равен null")
+                    }
+
                 }
             }
 

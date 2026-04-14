@@ -22,7 +22,7 @@ class CalendarViewModel @Inject constructor (
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)
 
-    val currentUserId: Int? get() = userId
+
 
 
 

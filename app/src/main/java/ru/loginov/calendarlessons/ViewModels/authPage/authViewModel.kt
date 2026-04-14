@@ -56,21 +56,25 @@ class authViewModel @Inject constructor(
                 return@launch
             }
 
-            val ok = passwordInput == user.password
-            if(ok){
-                _uiState.update {
-                    it.copy(
-                    isLoading = false,
-                    isAuthenticated = ok,
-                    userId = uiState.value.userId
-                ) }
-            } else {
-                _uiState.update{
-                    it.copy(
-                    isLoading = false,
-                    error = if (ok) null else "Неверный пароль"
-                )}
-        }
+            if(user != null){
+                val ok = passwordInput == user.password
+                if(ok){
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            isAuthenticated = ok,
+                            userId = uiState.value.userId
+                        ) }
+                } else {
+                    _uiState.update{
+                        it.copy(
+                            isLoading = false,
+                            error = if (ok) null else "Неверный пароль"
+                        )}
+                }
+            }
+
+
         }
     }
 }
