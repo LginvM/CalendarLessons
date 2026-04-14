@@ -70,9 +70,12 @@ fun auth(
             uiState.error?.let { Text(text = it, color = Color.Red) }
             if (uiState.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
-                LaunchedEffect(Unit) {
-                    navController.previousBackStackEntry?.savedStateHandle?.set("userId",uiState.userId)
-                    navController.navigate("${Routes.Calendar.name}?id=${uiState.userId}")
+                LaunchedEffect(uiState.isAuthenticated) {
+//                    navController.previousBackStackEntry?.savedStateHandle?.set("userId",uiState.userId)
+//                    navController.navigate("${Routes.Calendar.name}?id=${uiState.userId}")
+                    navController.navigate("${Routes.Calendar.name}/${uiState.userId}"){
+                        popUpTo(Routes.Auth.name) { inclusive = true }
+                    }
                 }
             }
 

@@ -1,21 +1,30 @@
 package ru.loginov.calendarlessons.ViewModels.Calendar
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
-import java.util.Date
+import javax.inject.Inject
 
-class CalendarViewModel (
-    private val repository: Repository
+@HiltViewModel
+class CalendarViewModel @Inject constructor (
+    private val repository: Repository,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel(){
+
+    val userId: Int = savedStateHandle.get<Int>("id") ?: -1
     val selectedDate = mutableStateOf<String?>(null)
     val availableSlot = mutableStateOf<List<Lessons_slot>>(emptyList())
-    val userId = mutableStateOf<Int?>(null)
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)
+
+    val currentUserId: Int? get() = userId
+
+
 
     fun setSelectedDate(date: String){
         selectedDate.value = date
@@ -38,11 +47,17 @@ class CalendarViewModel (
 
     fun bookLesson(lessonsSlotId : Int){
         val date = selectedDate.value ?:return
-        val currentUserId = userId.value ?:return
+        val currentUserId = userId ?:return
 
         viewModelScope.launch {
-            repository.bookUser(currentUserId,lessonsSlotId,date)
-            loadAvailableSlots(date)
+            try {
+                repository.bookUser(currentUserId,lessonsSlotId,date)
+                loadAvailableSlots(date)
+            } catch (
+            e: Exception
+            ){
+                error.value = "Failed to book lesson: ${e.message}"
+            }
         }
     }
 }
