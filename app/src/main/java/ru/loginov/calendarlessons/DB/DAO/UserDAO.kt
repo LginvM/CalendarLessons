@@ -1,5 +1,6 @@
 package ru.loginov.calendarlessons.DB.DAO
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Embedded
@@ -98,6 +99,7 @@ data class User(
     val user: User,
 )
 data class PhoneAndPassword(
+    @ColumnInfo(name ="user_id")
     val id:Int,
     val number: String,
     val password: String
