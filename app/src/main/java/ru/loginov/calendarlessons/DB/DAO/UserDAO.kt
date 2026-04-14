@@ -1,5 +1,6 @@
 package ru.loginov.calendarlessons.DB.DAO
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Embedded
@@ -25,7 +26,7 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
-    @Query("SELECT * FROM user WHERE number = :phone LIMIT 1")
+    @Query("SELECT user_id, number, password FROM user WHERE number = :phone LIMIT 1")
     suspend fun getNumberAndPassword(phone: String): PhoneAndPassword?
 
     @Query("SELECT * FROM user")
@@ -84,17 +85,22 @@ interface LessonDao{
 
     //записаться
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun bookLesson(lesson: Lesson)
+    suspend fun bookLesson(lesson: Lessons)
 
+
+}
+@Dao
+interface Lessons_slotDao{
 
 }
 
 
 data class User(
-    @Embedded val user: User,
-
+    val user: User,
 )
 data class PhoneAndPassword(
+    @ColumnInfo(name ="user_id")
+    val id:Int,
     val number: String,
     val password: String
 )

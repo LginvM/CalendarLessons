@@ -1,6 +1,5 @@
 package ru.loginov.calendarlessons.Screens.Calendar
 
-import android.widget.DatePicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,45 +16,39 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.room.util.TableInfo
+import androidx.hilt.navigation.compose.hiltViewModel
+import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.ViewModels.Calendar.CalendarViewModel
-import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
-import kotlin.collections.get
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.tooling.preview.Preview
-import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import java.util.Date
+import java.util.Locale
 
 @Composable
 fun CalendarScreen(
-    navController: NavController,
-    viewModel: CalendarViewModel = viewModel()
+    viewModel: CalendarViewModel = hiltViewModel()
 ){
-    val avaibaleSlots = viewModel.availableSlot
-    val isLoading = viewModel.isLoading
-    val selectedDate = viewModel.selectedDate
+    val availableSlot by viewModel.availableSlot
+    val isLoading by viewModel.isLoading
+    val selectedDate by viewModel.selectedDate
+    val errorMessage by viewModel.error
 
     Column(modifier = Modifier.padding(16.dp)){
         DatePicker{ date ->
             viewModel.setSelectedDate(date)
         }
-        if(isLoading.value){
+        if(isLoading){
             Text("Loading...")
         }
-        if(selectedDate.value != null){
-            Text("Available slots on ${selectedDate.value}:")
-        if(avaibaleSlots.value.isEmpty()){
+        if(selectedDate != null){
+            Text("Available slots on ${selectedDate}:")
+        if(availableSlot.isEmpty()){
             Text("Empty")
         }else{
             LazyColumn {
-                items(avaibaleSlots.value){
+                items(availableSlot){
                     slot -> SlotItem(slot = slot){
                         viewModel.bookLesson(slot.id)
                 }

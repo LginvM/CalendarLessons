@@ -24,23 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ru.loginov.calendarlessons.ViewModels.userPages.DetailState
 import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModel
-import ru.loginov.calendarlessons.ViewModels.userPages.DetailViewModelFactor
 import ru.loginov.calendarlessons.ui.theme.Shapes
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun UserInfo(
-    id:Int,
     navigateUp:() -> Unit
 ){
-    val viewModel = viewModel<DetailViewModel>(factory = DetailViewModelFactor(id))
+    val viewModel: DetailViewModel = hiltViewModel()
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     Scaffold {
 
         InfoDetailEntry(
-            state = viewModel.state,
+            state = state,
             onNameChange = viewModel::onNameChange,
             onLastNameChange = viewModel::onLastNameChange,
             onNumber = viewModel::onNumber,
@@ -48,7 +50,7 @@ fun UserInfo(
             onBirthday = viewModel::onBirthday,
             onBalance = viewModel::onBalance,
             onNotice = viewModel::onNotice,
-            updateUser = {viewModel.updateUser(id)},
+            updateUser = {viewModel.updateUser()},
             saveUser = viewModel::addUser
         ){
             navigateUp.invoke()
@@ -248,21 +250,3 @@ fun intConv(input:String):Int{
     val normalized = input.filter { it.isDigit() }
     return normalized.toInt()
 }
-
-//@Composable
-//@Preview(showSystemUi = true)
-//fun PrevDetailEntry(){
-//    InfoDetailEntry(
-//        state = DetailState(),
-//        onNameChange = {},
-//        onLastNameChange = {},
-//        onNumber = {},
-//        onPassword = {},
-//        onBirthday = {},
-//        navigateUp = {},
-//        onBalance = {},
-//        onNotice = {},
-//        saveUser = {},
-//        updateUser = {}
-//    )
-//}

@@ -13,12 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.loginov.calendarlessons.Navigation.Routes
 import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
@@ -26,10 +28,10 @@ import ru.loginov.calendarlessons.ViewModels.authPage.authViewModel
 
 @Composable
 fun auth(
-    navController: NavController
+    navController: NavController,
 ){
-    val authViewModel = viewModel(modelClass = authViewModel::class.java)
-    val uiState = authViewModel.uiState
+    val viewModel: authViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
 
     Box(
@@ -42,22 +44,22 @@ fun auth(
 
 
             TextField(
-                value = uiState.value.number,
-                onValueChange = { authViewModel.onNumberChanged(it) },
+                value = uiState.number,
+                onValueChange = { viewModel.onNumberChanged(it) },
                 label = {
                     Text("Номер")
                 },
                 modifier = Modifier
             )
             Spacer(Modifier.size(8.dp))
-            TextField(value = uiState.value.password,
-                onValueChange = { authViewModel.onPasswordChanged(it) },
+            TextField(value = uiState.password,
+                onValueChange = { viewModel.onPasswordChanged(it) },
                 label = {
                     Text("Пароль")
                 },
                 trailingIcon = {
                     // Кнопка-иконка справа
-                    IconButton(onClick = { authViewModel.login() }) {
+                    IconButton(onClick = { viewModel.login() }) {
                         Icon(
                             imageVector = Icons.Default.Clear,
                             contentDescription = "Очистить"
@@ -65,12 +67,19 @@ fun auth(
                     }
                 }
             )
-            uiState.value.error?.let { Text(text = it, color = Color.Red) }
-            if (uiState.value.isAuthenticated) {
+            uiState.error?.let { Text(text = it, color = Color.Red) }
+            if (uiState.isAuthenticated) {
                 Text(text = "Успешно", color = Color.Green)
-                LaunchedEffect(Unit) {
-                    navController.previousBackStackEntry?.savedStateHandle?.set("userId",uiState.value.userId)
-                    navController.navigate("${Routes.Calendar.name}?id=${uiState.value.userId}")
+
+                LaunchedEffect(uiState.isAuthenticated,uiState.userId) {
+                    uiState.userId?.let{
+                        id -> navController.navigate("${Routes.Calendar.name}/${id}"){
+                        popUpTo(Routes.Auth.name) { inclusive = true }
+                    }
+                    } ?: run{
+                        println("Ошибка: Авторизация успешна, но userId равен null")
+                    }
+
                 }
             }
 
@@ -80,11 +89,6 @@ fun auth(
     }
 }
 
-
-@Composable
-fun uiAuth(){
-//
-}
 
 @Composable
 @Preview(showSystemUi = true)
