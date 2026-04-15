@@ -38,6 +38,8 @@ fun CalendarScreen(
     Column(modifier = Modifier.padding(16.dp)){
         DatePicker{ date ->
             viewModel.setSelectedDate(date)
+
+            println("DEBUG: userId = ${viewModel.userId}")
         }
         if(isLoading){
             Text("Loading...")

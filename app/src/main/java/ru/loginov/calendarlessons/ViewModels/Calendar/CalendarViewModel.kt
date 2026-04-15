@@ -23,9 +23,6 @@ class CalendarViewModel @Inject constructor (
     val error = mutableStateOf<String?>(null)
 
 
-
-
-
     fun setSelectedDate(date: String){
         selectedDate.value = date
         loadAvailableSlots(date)

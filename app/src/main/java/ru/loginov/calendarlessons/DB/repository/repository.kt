@@ -1,5 +1,6 @@
 package ru.loginov.calendarlessons.DB.repository
 
+import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.Flow
 import ru.loginov.calendarlessons.DB.DAO.Lesson
 import ru.loginov.calendarlessons.DB.DAO.LessonDao
@@ -12,6 +13,7 @@ import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.DB.tables.User
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 
 class Repository(
@@ -67,5 +69,46 @@ class Repository(
         //lessonDao.bookLesson(Lesson)
     }
 
+    suspend fun initializeDefaultSlots(){
+        val existingsSlots = lessonDao.getAllSlots()
+        if(existingsSlots.isNotEmpty()) return
 
+        val defaultSlots = mutableListOf<Lessons_slot>()
+        val dayOfWeek = 1..7
+        val startHour = 10
+        val endHour = 18
+
+        for (day in dayOfWeek){
+            for(hour in startHour until endHour){
+                val startCalendar = Calendar.getInstance().apply{
+                    clear()
+                    set(Calendar.HOUR_OF_DAY,hour +1)
+                    set(Calendar.MINUTE,0)
+                    set(Calendar.SECOND,0)
+                    set(Calendar.MILLISECOND,0)
+                }
+                val startTime = java.sql.Time(startCalendar.timeInMillis)
+
+                val endCalendar = Calendar.getInstance().apply {
+                    clear()
+                    set(Calendar.HOUR_OF_DAY,hour +1)
+                    set(Calendar.MINUTE,0)
+                    set(Calendar.SECOND,0)
+                    set(Calendar.MILLISECOND,0)
+                }
+
+                val endTime = java.sql.Time(endCalendar.timeInMillis)
+
+                defaultSlots.add(
+                    Lessons_slot(
+                        id = 0,
+                        start_time = startTime,
+                        end_time = endTime,
+                        day_of_week = day
+                    )
+                )
+            }
+        }
+        Lessons_slotDao.insertAll(defaultSlots)
+    }
 }

@@ -91,7 +91,11 @@ interface LessonDao{
 }
 @Dao
 interface Lessons_slotDao{
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(slot: List<Lessons_slot>)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(slot: Lessons_slot)
 }
 
 
