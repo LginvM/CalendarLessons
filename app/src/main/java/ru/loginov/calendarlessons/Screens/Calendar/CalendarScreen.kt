@@ -63,6 +63,7 @@ fun CalendarScreen(
 
 @Composable
 fun SlotItem(slot: Lessons_slot,onBook:() -> Unit){
+    val timeFormatter = remember { SimpleDateFormat("HH:mm", java.util.Locale.getDefault()) }
     Card(
         Modifier
             .fillMaxWidth()
@@ -71,7 +72,7 @@ fun SlotItem(slot: Lessons_slot,onBook:() -> Unit){
 
     ){
         Text(
-            text = "${slot.start_time}-${slot.end_time}",
+            text = "${timeFormatter.format(slot.start_time)}-${timeFormatter.format(slot.end_time)}",
             modifier = Modifier.padding(12.dp)
         )
     }

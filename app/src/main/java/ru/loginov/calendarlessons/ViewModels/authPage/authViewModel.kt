@@ -59,6 +59,7 @@ class authViewModel @Inject constructor(
             if(user != null){
                 val ok = passwordInput == user.password
                 if(ok){
+                    repository.initializeDefaultSlots()
                     _uiState.update {
                         it.copy(
                             isLoading = false,

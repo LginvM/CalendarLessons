@@ -11,10 +11,12 @@ import ru.loginov.calendarlessons.DB.DAO.UserDao
 import ru.loginov.calendarlessons.DB.tables.Lessons
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.DB.tables.User
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 
 class Repository(
     private val userDao: UserDao,
@@ -60,13 +62,18 @@ class Repository(
 
     //Создание записи о занятии
     suspend fun bookUser(userId:Int, lessonSlotId:Int, date: String){
-        val lesson = Lesson(
-            userId = userId,
-            lessonSlotId = lessonSlotId,
-            date = date
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateObj = formatter.parse(date) ?: return
+
+        val entityForDB = Lessons(
+            id = 0,
+            user_id = userId,
+            lesson_slot_id = lessonSlotId,
+            lesson_date = Date(dateObj.time),
+            created_at = Date()
             )
 
-        //lessonDao.bookLesson(Lesson)
+        lessonDao.bookLesson(entityForDB)
     }
 
     suspend fun initializeDefaultSlots(){

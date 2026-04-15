@@ -38,8 +38,8 @@ data class Lessons(
     val user_id: Int,
     val lesson_slot_id: Int,
     val lesson_date: Date,
-    val status: String,
-    val created_at: Date
+    val status: String? = null,
+    val created_at: Date? = null
 )
 
 @Entity(tableName = "type_lessons")
