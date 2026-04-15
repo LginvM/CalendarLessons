@@ -56,3 +56,26 @@ fun DrumNavigation(
 
     }
 }
+
+@Composable
+fun ForFirstStart(navHostController: NavHostController = rememberNavController()){
+    NavHost(navHostController, startDestination = Routes.ListUsers.name){
+        composable(route = Routes.ListUsers.name) {
+            screenOfUsers(
+                onNavigate = { id ->
+                    navHostController.navigate("${Routes.UpdateUser.name}/$id")
+                }
+            )
+        }
+
+        composable(route = "${Routes.UpdateUser.name}/{id}",
+            arguments = listOf(
+                navArgument("id"){
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )) { UserInfo(navHostController::navigateUp)
+
+        }
+    }
+}
