@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.ViewModels.Calendar.CalendarViewModel
 import java.text.SimpleDateFormat
@@ -63,17 +64,18 @@ fun CalendarScreen(
 
 @Composable
 fun SlotItem(slot: Lessons_slot,onBook:() -> Unit){
-    val timeFormatter = remember { SimpleDateFormat("HH:mm", java.util.Locale.getDefault()) }
+    val timeFormatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
     Card(
         Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable{onBook()},
+            .clickable{ onBook() },
 
     ){
         Text(
             text = "${timeFormatter.format(slot.start_time)}-${timeFormatter.format(slot.end_time)}",
             modifier = Modifier.padding(12.dp)
+
         )
     }
 }
