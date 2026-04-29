@@ -15,7 +15,7 @@ import ru.loginov.calendarlessons.DB.tables.User
 
 @Database(
     entities = [User::class, Lessons::class, TypeLessons::class, Lessons_slot::class],
-    version = 3,
+    version = 4,
     exportSchema = false,
 )
 @TypeConverters(DateConverter::class)

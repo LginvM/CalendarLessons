@@ -22,10 +22,40 @@ class CalendarViewModel @Inject constructor (
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)
 
+    val pendingBookingSlotId = mutableStateOf<Int?>(null)
+
+    val showSuccessDialog = mutableStateOf(false)
 
     fun setSelectedDate(date: String){
         selectedDate.value = date
+        pendingBookingSlotId.value = null
         loadAvailableSlots(date)
+    }
+
+    fun requestBooking(slotId: Int){
+        pendingBookingSlotId.value = slotId
+    }
+
+    fun confirmBooking(){
+        val slotId = pendingBookingSlotId.value ?:return
+        val date = selectedDate.value ?: return
+        if(userId == -1) return
+
+        viewModelScope.launch {
+            try {
+                repository.bookUser(userId,slotId,date)
+                showSuccessDialog.value = true
+                pendingBookingSlotId.value = null
+                loadAvailableSlots(date)
+            } catch (e: Exception){
+                error.value = "Ошибка бронирования: ${e.message}"
+                pendingBookingSlotId.value = null
+            }
+        }
+    }
+
+    fun cancelBooking(){
+        pendingBookingSlotId.value = null
     }
 
     private fun loadAvailableSlots(date:String){

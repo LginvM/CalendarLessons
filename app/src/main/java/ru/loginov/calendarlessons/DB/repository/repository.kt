@@ -89,7 +89,7 @@ class Repository(
             for(hour in startHour until endHour){
                 val startCalendar = Calendar.getInstance().apply{
                     clear()
-                    set(Calendar.HOUR_OF_DAY,hour +1)
+                    set(Calendar.HOUR_OF_DAY,hour)
                     set(Calendar.MINUTE,0)
                     set(Calendar.SECOND,0)
                     set(Calendar.MILLISECOND,0)
