@@ -30,38 +30,46 @@ import java.util.Locale
 @Composable
 fun CalendarScreen(
     viewModel: CalendarViewModel = hiltViewModel()
-){
+) {
+    val slots by viewModel.slotsList
+    val pendingSlotId by viewModel.pendingBookingSlotId
     val availableSlot by viewModel.availableSlot
     val isLoading by viewModel.isLoading
     val selectedDate by viewModel.selectedDate
     val errorMessage by viewModel.error
+    val showDialog by viewModel.showSuccessDialog
 
-    Column(modifier = Modifier.padding(16.dp)){
-        DatePicker{ date ->
+    Column(modifier = Modifier.padding(16.dp)) {
+        DatePicker { date ->
             viewModel.setSelectedDate(date)
 
             println("DEBUG: userId = ${viewModel.userId}")
         }
-        if(isLoading){
+        if (isLoading) {
             Text("Loading...")
         }
-        if(selectedDate != null){
+        if (selectedDate != null) {
             Text("Available slots on ${selectedDate}:")
-        if(availableSlot.isEmpty()){
-            Text("Empty")
-        }else{
-            LazyColumn {
-                items(availableSlot){
-                    slot -> SlotItem(slot = slot){
-                        viewModel.bookLesson(slot.id)
-                }
+
+            if (availableSlot.isEmpty()) {
+                Text("Empty")
+            } else {
+                LazyColumn {
+                    items(slots) { item ->
+                        SlotItem(
+                            slot = item.slot,
+                            isBooked = item.isBooked,
+                            onBooked = {
+                                if (!item.isBooked) viewModel.requestBooking(item.slot.id)
+                            }
+                        )
+                    }
+
                 }
             }
         }
-        }
     }
 }
-
 @Composable
 fun SlotItem(slot: Lessons_slot,onBook:() -> Unit){
     val timeFormatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }

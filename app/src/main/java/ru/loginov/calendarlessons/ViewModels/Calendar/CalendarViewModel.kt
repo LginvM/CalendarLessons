@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
+import ru.loginov.calendarlessons.models.SlotUiModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,10 +22,10 @@ class CalendarViewModel @Inject constructor (
     val availableSlot = mutableStateOf<List<Lessons_slot>>(emptyList())
     val isLoading = mutableStateOf(false)
     val error = mutableStateOf<String?>(null)
-
     val pendingBookingSlotId = mutableStateOf<Int?>(null)
-
     val showSuccessDialog = mutableStateOf(false)
+    val slotsList = mutableStateOf<List<SlotUiModel>>(emptyList())
+
 
     fun setSelectedDate(date: String){
         selectedDate.value = date
@@ -61,9 +62,10 @@ class CalendarViewModel @Inject constructor (
     private fun loadAvailableSlots(date:String){
         isLoading.value = true
         viewModelScope.launch {
+
             try {
-                val slots = repository.getAvailableSlots(date)
-                availableSlot.value = slots
+                val slots = repository.getAllSlotsForDate(date)
+                slotsList.value = slots
             } catch (e: Exception) {
                 error.value = "Error downloading slots"
             } finally {

@@ -11,6 +11,7 @@ import ru.loginov.calendarlessons.DB.DAO.UserDao
 import ru.loginov.calendarlessons.DB.tables.Lessons
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.DB.tables.User
+import ru.loginov.calendarlessons.models.SlotUiModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -117,5 +118,22 @@ class Repository(
             }
         }
         Lessons_slotDao.insertAll(defaultSlots)
+    }
+
+    suspend fun getAllSlotsForDate(date:String):List<SlotUiModel>{
+        val allSlots = lessonDao.getAllSlots()
+        val bookedSlotId = lessonDao.getBookedSlotsId(date)
+
+        val dayOfWeek = LocalDate.parse(date.trim()).dayOfWeek.value % 7
+
+        val daysSlots = allSlots.filter { it.day_of_week == dayOfWeek }
+
+        return daysSlots.map {
+            slot ->
+            SlotUiModel(
+                slot = slot,
+                isBooked = bookedSlotId.contains(slot.id)
+            )
+        }
     }
 }
