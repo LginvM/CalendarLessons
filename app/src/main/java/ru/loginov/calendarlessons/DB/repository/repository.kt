@@ -156,5 +156,7 @@ class Repository(
             )
             userDao.insert(testUser)
         }
+        initializeDefaultSlots()
     }
+
 }
