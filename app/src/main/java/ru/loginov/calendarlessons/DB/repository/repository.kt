@@ -2,6 +2,7 @@ package ru.loginov.calendarlessons.DB.repository
 
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import ru.loginov.calendarlessons.DB.DAO.Lesson
 import ru.loginov.calendarlessons.DB.DAO.LessonDao
 import ru.loginov.calendarlessons.DB.DAO.Lessons_slotDao
@@ -134,6 +135,26 @@ class Repository(
                 slot = slot,
                 isBooked = bookedSlotId.contains(slot.id)
             )
+        }
+    }
+
+
+    suspend fun initializeTestUser(){
+        val users = userDao.getAllUsers().first()
+
+        if(users.isEmpty()){
+
+            val testUser = User(
+            0,
+            "save",
+            "save",
+            "save",
+            "save",
+            "2000-01-01",
+            1000,
+            "Test"
+            )
+            userDao.insert(testUser)
         }
     }
 }
