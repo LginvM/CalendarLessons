@@ -6,18 +6,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
@@ -59,7 +64,7 @@ fun CalendarScreen(
                         SlotItem(
                             slot = item.slot,
                             isBooked = item.isBooked,
-                            onBooked = {
+                            onBook = {
                                 if (!item.isBooked) viewModel.requestBooking(item.slot.id)
                             }
                         )
@@ -68,23 +73,62 @@ fun CalendarScreen(
                 }
             }
         }
+        if(pendingSlotId!=null){
+            AlertDialog(
+                onDismissRequest = { viewModel.cancelBooking() },
+                title = { Text("Accept") },
+                text = { Text("Are you sure?") },
+                confirmButton = {
+                    TextButton(onClick = {viewModel.confirmBooking()}) {
+                        Text("Yes")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { viewModel.cancelBooking() }) {
+                        Text("Cancel")
+                    }
+                },
+            )
+        }
+        if(showDialog){
+            AlertDialog(
+                onDismissRequest = { viewModel.showSuccessDialog.value = false },
+                title = { Text("Success!") },
+                text = { Text("Slot is book") },
+                confirmButton = {
+                    TextButton(onClick = {viewModel.showSuccessDialog.value = false}) {
+                        Text("Ok")
+                    }
+                }
+            )
+        }
     }
 }
+
+
 @Composable
-fun SlotItem(slot: Lessons_slot,onBook:() -> Unit){
+fun SlotItem(slot: Lessons_slot, isBooked: Boolean, onBook:() -> Unit){
     val timeFormatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
+
+    val backgroundColor = if (isBooked) Color.LightGray else Color.White
+    val textColor = if (isBooked) Color.Gray else Color.Black
+    val clicableEnabled = !isBooked
     Card(
         Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable{ onBook() },
+            .clickable(enabled = clicableEnabled) { onBook() },
 
     ){
         Text(
             text = "${timeFormatter.format(slot.start_time)}-${timeFormatter.format(slot.end_time)}",
+            color = textColor,
             modifier = Modifier.padding(12.dp)
-
         )
+
+        if(isBooked){
+            Text("Занято", fontSize = 12.sp, color = Color.DarkGray, modifier = Modifier.padding(start = 12.dp, bottom = 8.dp))
+        }
     }
 }
 
