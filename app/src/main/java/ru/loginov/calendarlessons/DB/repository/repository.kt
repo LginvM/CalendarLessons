@@ -125,7 +125,7 @@ class Repository(
         val allSlots = lessonDao.getAllSlots()
         val bookedSlotId = lessonDao.getBookedSlotsId(date)
 
-        val dayOfWeek = LocalDate.parse(date.trim()).dayOfWeek.value % 7
+        val dayOfWeek = LocalDate.parse(date.trim()).dayOfWeek.value
 
         val daysSlots = allSlots.filter { it.day_of_week == dayOfWeek }
 

@@ -53,7 +53,7 @@ fun CalendarScreen(
         if (isLoading) {
             Text("Loading...")
         }
-        if (selectedDate != null) {
+        if (slots != null) {
             Text("Available slots on ${selectedDate}:")
 
             if (availableSlot.isEmpty()) {
