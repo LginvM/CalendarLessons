@@ -80,12 +80,16 @@ class Repository(
 
     suspend fun initializeDefaultSlots(){
         val existingsSlots = lessonDao.getAllSlots()
-        if(existingsSlots.isNotEmpty()) return
+        if(existingsSlots.isNotEmpty()) {
+            println("DEBUG: Слоты уже есть")
+            return}
 
         val defaultSlots = mutableListOf<Lessons_slot>()
         val dayOfWeek = 1..7
         val startHour = 10
         val endHour = 18
+
+        println("DEBUG: Начинаем создание слотов")
 
         for (day in dayOfWeek){
             for(hour in startHour until endHour){
@@ -119,6 +123,8 @@ class Repository(
             }
         }
         Lessons_slotDao.insertAll(defaultSlots)
+        val newCount = lessonDao.getAllSlots().size
+        println("DEBUG: Создано слотов :${newCount}")
     }
 
     suspend fun getAllSlotsForDate(date:String):List<SlotUiModel>{

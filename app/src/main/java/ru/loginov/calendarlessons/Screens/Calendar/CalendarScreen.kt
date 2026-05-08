@@ -56,7 +56,7 @@ fun CalendarScreen(
         if (slots != null) {
             Text("Available slots on ${selectedDate}:")
 
-            if (availableSlot.isEmpty()) {
+            if (slots.isEmpty()) {
                 Text("Empty")
             } else {
                 LazyColumn {
@@ -152,7 +152,10 @@ fun DatePicker(onDateSelected:(String) -> Unit){
         Button(onClick = {
             val selected = datePickerState.selectedDateMillis
             if(selected!=null){
-                onDateSelected(formatter.format(Date(selected)))
+                val formattedDate = formatter.format(Date(selected))
+                println("DEBUG DATEPICKER: Выбрано :$selected, строка: $formattedDate")
+
+                onDateSelected(formattedDate)
             }
         }) {
             Text("Выбрать дату")
