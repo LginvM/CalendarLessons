@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "ru.loginov.calendarlessons"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "ru.loginov.calendarlessons"
@@ -64,8 +64,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
+//    implementation("androidx.compose.material3:material3:1.5.0-alpha19")
+//
+//
+//    implementation("androidx.compose.material:material-icons-core:1.5.0-alpha19")
+//    implementation("androidx.compose.material:material-icons-extended:1.5.0-alpha19")
 
 
     implementation(libs.room.runtime)

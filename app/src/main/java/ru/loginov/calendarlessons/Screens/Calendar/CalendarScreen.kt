@@ -137,6 +137,10 @@ fun DatePicker(onDateSelected:(String) -> Unit){
 
     val locale = rememberLocale()
     val calendar = Calendar.getInstance()
+
+    println("DEBUG CALENDAR: millis: ${calendar.timeInMillis}")
+    println("DEBUG CALENDAR: millis: ${calendar.time}")
+
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
 
     val formatter = remember(locale){
