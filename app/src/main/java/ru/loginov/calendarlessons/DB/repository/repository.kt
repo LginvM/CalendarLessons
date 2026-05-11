@@ -1,9 +1,6 @@
 package ru.loginov.calendarlessons.DB.repository
 
-import androidx.compose.runtime.mutableStateOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import ru.loginov.calendarlessons.DB.DAO.Lesson
 import ru.loginov.calendarlessons.DB.DAO.LessonDao
 import ru.loginov.calendarlessons.DB.DAO.Lessons_slotDao
 import ru.loginov.calendarlessons.DB.DAO.PhoneAndPassword
@@ -15,7 +12,6 @@ import ru.loginov.calendarlessons.DB.tables.User
 import ru.loginov.calendarlessons.models.SlotUiModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -65,17 +61,36 @@ class Repository(
 
     //Создание записи о занятии
     suspend fun bookUser(userId:Int, lessonSlotId:Int, date: String){
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply{
             timeZone = TimeZone.getTimeZone("UTC")
-
         }
+
+
+
         val dateObj = formatter.parse(date) ?: return
+
+        println(">>> REPO DEBUG: Строка входная: $date")
+        println(">>> REPO DEBUG: millis после парсинга: ${dateObj.time}")
+        println(">>> REPO DEBUG: Дата в UTC: ${dateObj}")
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply{
+            time = dateObj
+            set(Calendar.HOUR_OF_DAY, 10)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+
+        val finalTimeMillis = calendar.timeInMillis
+
+        println("+++ FIX DEBUG: Было (00:00): ${dateObj.time}")
+        println("+++ FIX DEBUG: Стало (10:00): $finalTimeMillis -> ${Date(finalTimeMillis)}")
 
         val entityForDB = Lessons(
             id = 0,
             user_id = userId,
             lesson_slot_id = lessonSlotId,
-            lesson_date = Date(dateObj.time),
+            lesson_date = Date(finalTimeMillis),
             created_at = Date()
             )
 
