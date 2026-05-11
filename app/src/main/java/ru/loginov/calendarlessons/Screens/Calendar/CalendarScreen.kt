@@ -24,10 +24,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.ViewModels.Calendar.CalendarViewModel
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -36,13 +40,12 @@ import java.util.Locale
 fun CalendarScreen(
     viewModel: CalendarViewModel = hiltViewModel()
 ) {
-    val slots by viewModel.slotsList
-    val pendingSlotId by viewModel.pendingBookingSlotId
-    val availableSlot by viewModel.availableSlot
-    val isLoading by viewModel.isLoading
-    val selectedDate by viewModel.selectedDate
-    val errorMessage by viewModel.error
-    val showDialog by viewModel.showSuccessDialog
+    val slots by viewModel.slotsList.collectAsStateWithLifecycle()
+    val pendingSlotId by viewModel.pendingBookingSlotId.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val selectedDate by viewModel.selectedDate.collectAsStateWithLifecycle()
+    val errorMessage by viewModel.error.collectAsStateWithLifecycle()
+    val showDialog by viewModel.showSuccessDialog.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.padding(16.dp)) {
         DatePicker { date ->
@@ -92,11 +95,11 @@ fun CalendarScreen(
         }
         if(showDialog){
             AlertDialog(
-                onDismissRequest = { viewModel.showSuccessDialog.value = false },
+                onDismissRequest = { viewModel.showSuccessDialog.value },
                 title = { Text("Success!") },
                 text = { Text("Slot is book") },
                 confirmButton = {
-                    TextButton(onClick = {viewModel.showSuccessDialog.value = false}) {
+                    TextButton(onClick = {viewModel.showSuccessDialog.value}) {
                         Text("Ok")
                     }
                 }
@@ -121,7 +124,7 @@ fun SlotItem(slot: Lessons_slot, isBooked: Boolean, onBook:() -> Unit){
 
     ){
         Text(
-            text = "${timeFormatter.format(slot.start_time)}-${timeFormatter.format(slot.end_time)}",
+            text = "${slot.start_time}-${slot.end_time}",
             color = textColor,
             modifier = Modifier.padding(12.dp)
         )
@@ -144,7 +147,7 @@ fun DatePicker(onDateSelected:(String) -> Unit){
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
 
     val formatter = remember(locale){
-        SimpleDateFormat("yyyy-MM-dd",locale)
+        DateTimeFormatter.ISO_LOCAL_DATE
     }
 
 
@@ -156,9 +159,11 @@ fun DatePicker(onDateSelected:(String) -> Unit){
         Button(onClick = {
             val selected = datePickerState.selectedDateMillis
             if(selected!=null){
-                val formattedDate = formatter.format(Date(selected))
-                println("DEBUG DATEPICKER: Выбрано :$selected, строка: $formattedDate")
+                val localDate = Instant.ofEpochMilli(selected)
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
 
+                val formattedDate = localDate.format(formatter)
                 onDateSelected(formattedDate)
             }
         }) {

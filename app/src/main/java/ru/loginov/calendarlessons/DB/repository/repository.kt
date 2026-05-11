@@ -10,12 +10,9 @@ import ru.loginov.calendarlessons.DB.tables.Lessons
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.DB.tables.User
 import ru.loginov.calendarlessons.models.SlotUiModel
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.time.LocalTime
+
 
 class Repository(
     private val userDao: UserDao,
@@ -52,7 +49,7 @@ class Repository(
         val allSlots = lessonDao.getAllSlots()
         val bookedSlotId = lessonDao.getBookedSlotsId(date)
 
-        val dayOfWeek = LocalDate.parse(date.trim()).dayOfWeek.value % 7
+        val dayOfWeek = LocalDate.parse(date.trim()).dayOfWeek.value
 
         return allSlots
             .filter{it.day_of_week == dayOfWeek}
@@ -61,40 +58,15 @@ class Repository(
 
     //Создание записи о занятии
     suspend fun bookUser(userId:Int, lessonSlotId:Int, date: String){
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply{
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
 
-
-
-        val dateObj = formatter.parse(date) ?: return
-
-        println(">>> REPO DEBUG: Строка входная: $date")
-        println(">>> REPO DEBUG: millis после парсинга: ${dateObj.time}")
-        println(">>> REPO DEBUG: Дата в UTC: ${dateObj}")
-
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply{
-            time = dateObj
-            set(Calendar.HOUR_OF_DAY, 10)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        val finalTimeMillis = calendar.timeInMillis
-
-        println("+++ FIX DEBUG: Было (00:00): ${dateObj.time}")
-        println("+++ FIX DEBUG: Стало (10:00): $finalTimeMillis -> ${Date(finalTimeMillis)}")
 
         val entityForDB = Lessons(
             id = 0,
             user_id = userId,
             lesson_slot_id = lessonSlotId,
-            lesson_date = Date(finalTimeMillis),
-            created_at = Date()
+            lesson_date = date,
+            created_at = System.currentTimeMillis()
             )
-
-        println(">>> REPO DEBUG: Сохраняем дату. Строка =$date, millis =${dateObj.time}, Result = ${entityForDB.lesson_date} ")
 
         lessonDao.bookLesson(entityForDB)
     }
@@ -114,30 +86,16 @@ class Repository(
 
         for (day in dayOfWeek){
             for(hour in startHour until endHour){
-                val startCalendar = Calendar.getInstance().apply{
-                    clear()
-                    set(Calendar.HOUR_OF_DAY,hour)
-                    set(Calendar.MINUTE,0)
-                    set(Calendar.SECOND,0)
-                    set(Calendar.MILLISECOND,0)
-                }
-                val startTime = java.sql.Time(startCalendar.timeInMillis)
 
-                val endCalendar = Calendar.getInstance().apply {
-                    clear()
-                    set(Calendar.HOUR_OF_DAY,hour +1)
-                    set(Calendar.MINUTE,0)
-                    set(Calendar.SECOND,0)
-                    set(Calendar.MILLISECOND,0)
-                }
+                val startTime = LocalTime.of(hour,0)
 
-                val endTime = java.sql.Time(endCalendar.timeInMillis)
+                val endTime = LocalTime.of(hour+1,0)
 
                 defaultSlots.add(
                     Lessons_slot(
                         id = 0,
-                        start_time = startTime,
-                        end_time = endTime,
+                        start_time = startTime.toString(),
+                        end_time = endTime.toString(),
                         day_of_week = day
                     )
                 )

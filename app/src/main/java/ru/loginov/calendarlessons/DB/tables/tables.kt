@@ -25,8 +25,8 @@ data class Lessons_slot(
     @ColumnInfo(name = "slot_id")
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val start_time: Time,
-    val end_time: Time,
+    val start_time: String,
+    val end_time: String,
     val day_of_week: Int
 )
 
@@ -37,9 +37,9 @@ data class Lessons(
     val id: Int,
     val user_id: Int,
     val lesson_slot_id: Int,
-    val lesson_date: Date,
+    val lesson_date: String,
     val status: String? = null,
-    val created_at: Date? = null
+    val created_at: Long = System.currentTimeMillis()
 )
 
 @Entity(tableName = "type_lessons")

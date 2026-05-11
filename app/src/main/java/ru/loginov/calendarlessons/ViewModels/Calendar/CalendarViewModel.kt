@@ -5,6 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.loginov.calendarlessons.DB.repository.Repository
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
@@ -18,58 +21,81 @@ class CalendarViewModel @Inject constructor (
 ): ViewModel(){
 
     val userId: Int = savedStateHandle.get<Int>("id") ?: -1
-    val selectedDate = mutableStateOf<String?>(null)
+
+    //New
+    private val _selectedDate = MutableStateFlow<String?>(null)
+    val selectedDate: StateFlow<String?> = _selectedDate.asStateFlow()
+
+
+    private val _slotsList = MutableStateFlow<List<SlotUiModel>>(emptyList())
+    val slotsList : StateFlow<List<SlotUiModel>> = _slotsList.asStateFlow()
+
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading : StateFlow<Boolean> = _isLoading.asStateFlow()
+
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
+
+
+    private val _pendingBookingSlotId = MutableStateFlow<Int?>(null)
+    val pendingBookingSlotId: StateFlow<Int?> = _pendingBookingSlotId.asStateFlow()
+
+
+    private val _showSuccessDialog = MutableStateFlow(false)
+    val showSuccessDialog : StateFlow<Boolean> = _showSuccessDialog.asStateFlow()
+
     val availableSlot = mutableStateOf<List<Lessons_slot>>(emptyList())
-    val isLoading = mutableStateOf(false)
-    val error = mutableStateOf<String?>(null)
-    val pendingBookingSlotId = mutableStateOf<Int?>(null)
-    val showSuccessDialog = mutableStateOf(false)
-    val slotsList = mutableStateOf<List<SlotUiModel>>(emptyList())
+
+
+
+
 
 
     fun setSelectedDate(date: String){
-        selectedDate.value = date
-        pendingBookingSlotId.value = null
+        _selectedDate.value = date
+        _pendingBookingSlotId.value = null
         loadAvailableSlots(date)
     }
 
     fun requestBooking(slotId: Int){
-        pendingBookingSlotId.value = slotId
+        _pendingBookingSlotId.value = slotId
     }
 
     fun confirmBooking(){
-        val slotId = pendingBookingSlotId.value ?:return
-        val date = selectedDate.value ?: return
+        val slotId = _pendingBookingSlotId.value ?:return
+        val date = _selectedDate.value ?: return
         if(userId == -1) return
 
         viewModelScope.launch {
             try {
                 repository.bookUser(userId,slotId,date)
-                showSuccessDialog.value = true
-                pendingBookingSlotId.value = null
+                _showSuccessDialog.value = true
+                _pendingBookingSlotId.value = null
                 loadAvailableSlots(date)
             } catch (e: Exception){
-                error.value = "Ошибка бронирования: ${e.message}"
-                pendingBookingSlotId.value = null
+                _error.value = "Ошибка бронирования: ${e.message}"
+                _pendingBookingSlotId.value = null
             }
         }
     }
 
     fun cancelBooking(){
-        pendingBookingSlotId.value = null
+        _pendingBookingSlotId.value = null
     }
 
     private fun loadAvailableSlots(date:String){
-        isLoading.value = true
+        _isLoading.value = true
         viewModelScope.launch {
 
             try {
                 val slots = repository.getAllSlotsForDate(date)
-                slotsList.value = slots
+                _slotsList.value = slots
             } catch (e: Exception) {
-                error.value = "Error downloading slots"
+                _error.value = "Error downloading slots"
             } finally {
-                isLoading.value = false
+                _isLoading.value = false
             }
         }
     }
@@ -85,7 +111,7 @@ class CalendarViewModel @Inject constructor (
             } catch (
             e: Exception
             ){
-                error.value = "Failed to book lesson: ${e.message}"
+                _error.value = "Failed to book lesson: ${e.message}"
             }
         }
     }

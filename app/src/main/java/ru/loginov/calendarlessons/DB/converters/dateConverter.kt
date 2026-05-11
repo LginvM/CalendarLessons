@@ -2,6 +2,8 @@ package ru.loginov.calendarlessons.DB.converters
 
 import androidx.room.TypeConverter
 import java.sql.Time
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 
 open class DateConverter{
@@ -24,4 +26,25 @@ open class DateConverter{
     fun fromTime(time:Time?):Long?{
         return time?.time
     }
+
+    @TypeConverter
+    fun fromTimestamp(value:Long?):Date?{
+        return value?.let{Date(it)}
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date:Date?):Long?{
+        return date?.time
+    }
+
+    @TypeConverter
+    fun fromLocalDate(date: LocalDate?):String?{
+        return date?.format(DateTimeFormatter.ISO_LOCAL_DATE)
+    }
+
+    @TypeConverter
+    fun toLocalDate(dateString: String?):LocalDate?{
+        return LocalDate.parse(dateString)
+    }
+
 }
