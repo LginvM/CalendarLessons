@@ -46,8 +46,6 @@ class CalendarViewModel @Inject constructor (
     private val _showSuccessDialog = MutableStateFlow(false)
     val showSuccessDialog : StateFlow<Boolean> = _showSuccessDialog.asStateFlow()
 
-    val availableSlot = mutableStateOf<List<Lessons_slot>>(emptyList())
-
 
 
 
