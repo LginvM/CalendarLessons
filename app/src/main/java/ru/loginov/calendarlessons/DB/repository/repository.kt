@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class Repository(
     private val userDao: UserDao,
@@ -64,7 +65,10 @@ class Repository(
 
     //Создание записи о занятии
     suspend fun bookUser(userId:Int, lessonSlotId:Int, date: String){
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+
+        }
         val dateObj = formatter.parse(date) ?: return
 
         val entityForDB = Lessons(
@@ -74,6 +78,8 @@ class Repository(
             lesson_date = Date(dateObj.time),
             created_at = Date()
             )
+
+        println(">>> REPO DEBUG: Сохраняем дату. Строка =$date, millis =${dateObj.time}, Result = ${entityForDB.lesson_date} ")
 
         lessonDao.bookLesson(entityForDB)
     }

@@ -139,7 +139,7 @@ fun DatePicker(onDateSelected:(String) -> Unit){
     val calendar = Calendar.getInstance()
 
     println("DEBUG CALENDAR: millis: ${calendar.timeInMillis}")
-    println("DEBUG CALENDAR: millis: ${calendar.time}")
+    println("DEBUG CALENDAR: millis: ${calendar.getTime()}")
 
     val datePickerState = rememberDatePickerState(initialSelectedDateMillis = calendar.timeInMillis)
 
