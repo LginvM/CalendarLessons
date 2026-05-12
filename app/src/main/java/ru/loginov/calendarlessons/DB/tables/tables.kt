@@ -3,8 +3,6 @@ package ru.loginov.calendarlessons.DB.tables
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Time
-import java.util.Date
 
 @Entity(tableName = "user")
 data class User(

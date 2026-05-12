@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.loginov.calendarlessons.DB.DAO.Lessons_slotDao
 import ru.loginov.calendarlessons.DB.repository.Repository
 import javax.inject.Singleton
 

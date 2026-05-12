@@ -3,7 +3,6 @@ package ru.loginov.calendarlessons.DB.DAO
 import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Delete
-import androidx.room.Embedded
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -13,7 +12,6 @@ import ru.loginov.calendarlessons.DB.tables.Lessons
 import ru.loginov.calendarlessons.DB.tables.Lessons_slot
 import ru.loginov.calendarlessons.DB.tables.TypeLessons
 import ru.loginov.calendarlessons.DB.tables.User
-import java.util.Date
 
 @Dao
 interface UserDao {
