@@ -28,16 +28,6 @@ class DateConverter{
     }
 
     @TypeConverter
-    fun fromTimestamp(value:Long?):Date?{
-        return value?.let{Date(it)}
-    }
-
-    @TypeConverter
-    fun dateToTimestamp(date:Date?):Long?{
-        return date?.time
-    }
-
-    @TypeConverter
     fun fromLocalDate(date: LocalDate?):String?{
         return date?.format(DateTimeFormatter.ISO_LOCAL_DATE)
     }
@@ -46,5 +36,17 @@ class DateConverter{
     fun toLocalDate(dateString: String?):LocalDate?{
         return LocalDate.parse(dateString)
     }
+
+//    @TypeConverter
+//    fun fromTimestamp(value:Long?):Date?{
+//        return value?.let{Date(it)}
+//    }
+//
+//    @TypeConverter
+//    fun dateToTimestamp(date:Date?):Long?{
+//        return date?.time
+//    }
+
+
 
 }

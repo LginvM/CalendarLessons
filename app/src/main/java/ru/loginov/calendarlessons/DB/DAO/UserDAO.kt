@@ -85,9 +85,7 @@ interface LessonDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun bookLesson(lesson: Lessons)
 
-    @Query("SELECT l.*,ls.start_time, ls.end_time " +
-            "FROM lesson " +
-            "l JOIN lesson_slot ls ON  l.lesson_slot_id = ls.slot_id " +
+    @Query("SELECT l.*,ls.start_time, ls.end_time FROM lesson l JOIN lesson_slot ls ON  l.lesson_slot_id = ls.slot_id " +
             "WHERE l.lesson_date =:date AND l.user_id =:userId")
     suspend fun getLessonsWithSlots(date:String, userId:Int):List<LessonsWithSlot>
 
@@ -120,11 +118,12 @@ data class Lesson(
 )
 
 data class LessonsWithSlot(
-    val id: Int,
+    val lesson_id: Int,
     val user_id: Int,
     val lesson_slot_id:Int,
     val lesson_date:String,
     val start_time: String,
+    val created_at: String,
     val end_time: String,
     val status: String?
 )

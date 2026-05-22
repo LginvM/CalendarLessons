@@ -92,11 +92,11 @@ fun CalendarScreen(
         }
         if(showDialog){
             AlertDialog(
-                onDismissRequest = { viewModel.showSuccessDialog.value },
+                onDismissRequest = { viewModel.dismissSuccessDialog() },
                 title = { Text("Success!") },
                 text = { Text("Slot is book") },
                 confirmButton = {
-                    TextButton(onClick = {viewModel.showSuccessDialog.value}) {
+                    TextButton(onClick = {viewModel.dismissSuccessDialog()}) {
                         Text("Ok")
                     }
                 }

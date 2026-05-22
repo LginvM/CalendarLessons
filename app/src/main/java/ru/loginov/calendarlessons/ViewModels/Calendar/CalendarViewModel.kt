@@ -77,6 +77,10 @@ class CalendarViewModel @Inject constructor (
         }
     }
 
+    fun dismissSuccessDialog(){
+        _showSuccessDialog.value = false
+    }
+
     fun cancelBooking(){
         _pendingBookingSlotId.value = null
     }
